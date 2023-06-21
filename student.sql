@@ -1,7 +1,5 @@
 USE student;
 
-DROP TABLE student;
-
 CREATE TABLE student (
     aNumber CHAR(9),
     fName VARCHAR(25),
@@ -9,6 +7,7 @@ CREATE TABLE student (
     email VARCHAR(25),
     username VARCHAR(25),
     password VARCHAR(25),
+    token VARCHAR(256),
     PRIMARY KEY (aNumber)
 );
 
