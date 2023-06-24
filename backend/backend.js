@@ -9,23 +9,6 @@ const host = "localhost";
 const password = "Bball#0128";
 const database = "student";
 
-app.get('/', function (req, res) {
-    console.log("Got a GET request");
- });
-
-app.post('/', function(req, res)
-{
-    console.log("Got a POST request");
-});
-
-var server = app.listen(8080, function()
-{
-    var host = server.address().address;
-    var port = server.address().port;
-
-    console.log(`Example app listening at http://${host}:${port}`);
-});
-
 // Define values.
 const api_key = 'hmfrcr54rrnf';
 const api_secret = 'yc2zaez6cwvr6tbmqm64dr68gjqruvapcet9y2azgw7qtpzdqtvm8udmqcce2utu';
@@ -51,8 +34,34 @@ function initServer(user_id)
     // Initialize a Server Client
     const serverClient = StreamChat.getInstance(api_key, api_secret);
     // Create User Token
-    return serverClient.createToken(user_id);
+    let token = serverClient.createToken(user_id);
+    let con = mysql.createConnection(
+        {
+            host: host,
+            user: user,
+            password: password,
+            database: database
+        }
+    );
+
+    con.connect(function(err)
+    {
+        if(err){throw err;}
+        else {
+            con.query(`UPDATE student SET token = '${token}' WHERE username = '${user_id}'`, function(err, result)
+            {
+                if(err)
+                {
+                    throw err;
+                }
+            })
+        }
+    })
 }
+
+console.log(initServer(""));
+
+
 
 function queryDatabase(query)
 {
